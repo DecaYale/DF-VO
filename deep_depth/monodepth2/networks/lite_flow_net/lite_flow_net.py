@@ -317,15 +317,23 @@ class LiteFlowNet(torch.nn.Module):
             tensorFlow = self.moduleRegularization[intLevel](tensorFirst[intLevel], tensorSecond[intLevel], tensorFeaturesFirst[intLevel], tensorFeaturesSecond[intLevel], tensorFlow)
             flows[5-cnt] = tensorFlow
 
+
+        post_flows={}
         # post-processing flow
         for i in flows:
-            flows[i] = flows[i] * (20.0 * (0.5 ** (i-1)))
+            # flows[i] = flows[i] * (20.0 * (0.5 ** (i-1)))
+            post_flows[("flow",i)] = flows[i] * (20.0 * (0.5 ** (i-1)))
+
             # _, _, out_h, out_w = flows[i].shape
             # flows[i] = torch.nn.functional.interpolate(input=flows[i], size=(raw_h, raw_w), mode='bilinear', align_corners=False)
             # flows[i][:, 0, :, :] *= float(raw_w) / float(out_w)
             # flows[i][:, 1, :, :] *= float(raw_h) / float(out_h)
-        return flows
-    
+        # return flows
+        return post_flows
+
+
+
+ 
 ##########################################################
 
 # def estimate(tensorFirst, tensorSecond):
