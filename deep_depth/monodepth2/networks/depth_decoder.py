@@ -45,10 +45,11 @@ class DepthDecoder(nn.Module):
             self.convs[("dispconv", s)] = Conv3x3(self.num_ch_dec[s], self.num_output_channels)
 
         self.decoder = nn.ModuleList(list(self.convs.values()))
-        if pred_disp:
+        self.pred_disp = pred_disp
+        if self.pred_disp:
             self.sigmoid = nn.Sigmoid()
         else:
-            self.sigmoid = lambda x:x
+            self.sigmoid = lambda x: nn.functional.elu(x)+1 #lambda x:x
 
     def forward(self, input_features):
         self.outputs = {}
