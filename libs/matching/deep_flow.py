@@ -431,7 +431,7 @@ class LiteFlow():
         norm_px_coord = torch.from_numpy(norm_px_coord).float().cuda()
 
         # Warp flow2 to flow1
-        warp_flow1 = F.grid_sample(-flow2, norm_px_coord)
+        warp_flow1 = F.grid_sample(-flow2, norm_px_coord, align_corners=True)
 
         # Calculate flow difference
         flow_diff = (flow1 - warp_flow1)
